@@ -1,5 +1,6 @@
 dispLevels = 16;
-Pocc = 10; % Occlusion penalty
+P1 = 10; % Occlusion penalty 1
+P2 = 20; % Occlusion penalty 2, P2 > P1
 
 % Read stereo image
 left = rgb2gray(imread('Left.png'));
@@ -32,18 +33,17 @@ for y = 1:rows
         for d = 1:dispLevels
             c1 = D(x-1,d);
             if d > 1
-                c2 = D(x-1,d-1)+Pocc;
+                c2 = D(x-1,d-1)+P1;
             else
                 c2 = Inf;
             end
             if d < dispLevels
-                c3 = D(x-1,d+1)+Pocc;
+                c3 = D(x-1,d+1)+P1;
             else
                 c3 = Inf;
             end
             [minCost,minD] = min(D(x-1,:));
-            c4 = minCost+Pocc*abs(minD-d);
-            %c4 = minCost+Pocc*2; %P2 > P1
+            c4 = minCost+P2;
             
             % Find minimum cost
             if c1 <= c2 && c1 <= c3 && c1 <= c4
